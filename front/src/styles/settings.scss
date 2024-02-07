@@ -1,0 +1,22 @@
+/**
+ * src/styles/settings.scss
+ *
+ * Configures SASS variables and Vuetify overwrites
+ */
+
+// https://vuetifyjs.com/features/sass-variables/`
+// @use 'vuetify/settings' with (
+//   $color-pack: false
+// );
+
+.u-padding {
+    padding: 16px;
+}
+
+.u-margin-bottom {
+    margin-bottom: 16x;
+}
+
+.u-margin-top {
+    margin-top: 16x;
+}

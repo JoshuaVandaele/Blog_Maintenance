@@ -1,0 +1,1 @@
+export type ModeDisplayArticle = 'READONLY' | 'UPDATE' | 'CREATE'
