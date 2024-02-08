@@ -5,6 +5,12 @@ import Res from '../helpers/res.helper';
 import { ArticleDto } from '../models/articleDto.model';
 import { FindOptionsWhere, ILike } from 'typeorm';
 
+/**
+ * Le fonction getFilterArticles permet de récupérer les articles en fonction des filtres donnés
+ * @param req la requête reçus (titre, contenu, auteur, isArticlesMe)
+ * @param res la reponse à renvoyer
+ * @returns 
+ */
 export const getFilterArticles = async (req : Request, res : Response) => {
     try {
         const articlesRepository = AppDataStore.getRepository(Article);
@@ -20,11 +26,13 @@ export const getFilterArticles = async (req : Request, res : Response) => {
                 },
         }
 
+        // On fait le lien avec la classe auteurs en appliquant les filtres
         const articles = await articlesRepository.find({
             relations: ["author"],
             where
         });             
-
+        
+        // On transforme les articles en dictionnaire
         const articlesDto: ArticleDto[] = articles.map((article) => ({...article, author: article.author.name, 
             isArticleMe: article.author.id === req.user.id}));
         
@@ -34,25 +42,35 @@ export const getFilterArticles = async (req : Request, res : Response) => {
     }
 };
 
+/**
+ *  fonction qui ajoute un article a la base de données
+ * @param req la requête reçus (titre, contenu)
+ * @param res 
+ * @returns 
+ */
 export const addArticle = async (req: Request, res: Response) => {
     try {
+        // recuperer la table des articles
         const articlesRepository = AppDataStore.getRepository(Article);
 
         const { title, content } = req.body;
 
+        // on la table des utilisateurs
         const usersRepository = AppDataStore.getRepository(User);
 
         const author = await usersRepository.findOne({where : {
             id : req.user.id
         }});
 
+        // on cree un nouvel article
         const newArticle = articlesRepository.create({
             title: title,
             content: content,
             author,
             date: new Date()
         });
-    
+        
+        // on le sauvegarde dans la base de données
         await articlesRepository.save(newArticle);
 
         const articleDto: ArticleDto = {...newArticle, author: newArticle.author.name, isArticleMe: true};
@@ -64,6 +82,12 @@ export const addArticle = async (req: Request, res: Response) => {
     }
 };
 
+/**
+ * La fonction updateArticle permet de mettre à jour un article de la base de données
+ * @param req la requête reçus (titre, contenu, date)
+ * @param res 
+ * @returns 
+ */
 
 export const  updateArticle = async(req: Request, res: Response)=> {
     const articlesRepository = AppDataStore.getRepository(Article);
@@ -84,6 +108,7 @@ export const  updateArticle = async(req: Request, res: Response)=> {
         return Res.send(res, 403, "Vous n'êtes pas autorisé à modifier cet article");
     }
 
+    // l'article est modifié dans la base de données
     const updateArticle = articlesRepository.update(articleId, req.body);
 
     article = await articlesRepository.findOne({where : {
@@ -92,7 +117,12 @@ export const  updateArticle = async(req: Request, res: Response)=> {
 
     res.json(article);
 }
-
+/**
+ * la fonction permet de supprimer un article de la base de données
+ * @param req 
+ * @param res 
+ * @returns 
+ */
 export const deleteArticle = async (req: Request, res: Response) => {
     try {
         console.log('delete article');
