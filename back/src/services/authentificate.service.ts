@@ -6,7 +6,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 
 export const generateTokenForUser = (user: User): string => {
 	try {
-	   const userToken: UserToken = {id: user.id, name: user.name, email: user.email};	
+	   const userToken: UserToken = {id: user.id, name: user.name, email: user.email};
 	   return jwt.sign(userToken, process.env.JWT_TOKEN_SECRET);
 	} catch (e) {
 		console.log(e);
@@ -21,11 +21,10 @@ export const hashPassword = async (password: string): Promise<string> => {
 	return hashedPassword;
 }
 
-export const checkPassword = (password: string, hashedPassword: string): boolean => {
-    const match = password === hashedPassword;
+export const checkPassword = async (password: string, hashedPassword: string): Promise<boolean> => {
+    const match = await bcrypt.compare(password, hashedPassword);
 	return match;
 }
-
 export const sendEMailResetPasswordUser = async(user: User): Promise<boolean>  => {
     const tokenPassword = await jwt.sign({id: user.id}, process.env.JWT_RESET_PASSWORD_SECRET, {expiresIn: '300s'});
 
@@ -40,7 +39,7 @@ export const sendEMailResetPasswordUser = async(user: User): Promise<boolean>  =
         },
     });
     module.exports = { transporter };
-    
+
     const mailOptions = {
         from: process.env.FROM_EMAIL,
         to: user.email,
@@ -63,7 +62,7 @@ export const changePasswordUser = async(password: string, token: string, res: Re
         const user = await usersRepository.findOne({where : { id }});
 
         if (!user) {
-			return res.status(404).send("Le compte pour changer le mot de passe n'existe pas !");     
+			return res.status(404).send("Le compte pour changer le mot de passe n'existe pas !");
         }
 
         // Update password
@@ -77,7 +76,7 @@ export const changePasswordUser = async(password: string, token: string, res: Re
                 password : hashPwd
             });
 
-		return res.status(200).send("Mot de passe modifié !");     
+		return res.status(200).send("Mot de passe modifié !");
     } catch (error) {
         if (error instanceof jwt.TokenExpiredError) {
             return Res.send(res, 401, "Token expired");
