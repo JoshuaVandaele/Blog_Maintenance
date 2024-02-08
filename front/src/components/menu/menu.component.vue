@@ -22,27 +22,7 @@
     import Avatar from '@/components/menu/avatar/avatar.component.vue';
   </script>
   
-  <style scoped>
-    .sc-menu__container {
-        display: flex;
-        justify-content: space-between;
-        padding: 16px 24px;
-        background-color: #1867C0;
-    }
-
-    .sc-menu__logo {
-        height: 45px;
-    }
-
-    .sc-menu__links {
-        display: flex;
-        align-items: center;
-        gap: 24px;
-
-        a, span {
-            color: white;
-        }
-    }
-
+  <style lang="scss">
+    @import './menu.component.scss';
   </style>
   

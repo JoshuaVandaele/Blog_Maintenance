@@ -16,9 +16,7 @@
     const alert = computed(() => store.getAlert);
   </script>
   
-  <style scoped>
-      .v-alert {
-        flex: none !important;
-    }
+  <style lang="scss">
+    @import './alert.component.scss';
   </style>
   

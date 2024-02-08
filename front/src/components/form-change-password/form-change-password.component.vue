@@ -131,6 +131,6 @@
       }
   </script>
     
-  <style lang="scss">
-    @import './formChangePassword';
+    <style lang="scss">
+    @import './form-change-password.component.scss';
   </style>

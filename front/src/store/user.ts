@@ -1,9 +1,13 @@
 import { defineStore } from "pinia";
 import router from "@/router";
 import Axios from "@/core/api";
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode, JwtPayload } from "jwt-decode";
 import { User, factoryUser } from "@/models/user.model";
 
+interface MyJwtPayload extends JwtPayload {
+    name?: string;
+    email?: string;
+}
 
 export interface userState {
     isLoggedUser: boolean,
@@ -24,8 +28,10 @@ export const useUserStore = defineStore('user', {
         getErrorAuthentification: (state) => state.errorAuthentification,
         getUser: (state): User | null => {
             if (state.token) {
-                const decoded = jwtDecode(state.token);
-                return factoryUser(decoded?.name, decoded?.email);
+                const decoded = jwtDecode<MyJwtPayload>(state.token);
+                if (decoded?.name && decoded?.email) {
+                    return factoryUser(decoded?.name, decoded?.email);
+                }
             }
             return null;
         }

@@ -92,25 +92,7 @@
 
 </script>
   
-  <!-- Add "scoped" attribute to limit CSS to this component only -->
-  <style scoped>
-    h1 {
-        margin-bottom: 32px;
-    }
-
-    .sc-form-article__form {
-        width: 700px;
-        padding: 32px;
-        box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-    }
-
-
-    .sc-form-article__container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 100vh;
-    }
-
-  </style>
+<style lang="scss">
+  @import './form-article.component.scss';
+</style>
   

@@ -19,19 +19,7 @@
     const articles = computed(() => store.getArticles);
 </script>
   
-  <style scoped>
-    .sc-list-articles__container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 32px;
-        padding: 16px;
-    }
-
-    .sc-list-articles__empty {
-        background-color: antiquewhite;
-        padding: 16px;
-        font-size: 20px;
-        font-weight: bold;
-    }
-  </style>
+<style lang="scss">
+    @import './list-articles.component.scss';
+</style>
   

@@ -6,11 +6,6 @@
 import FormConnexion from '@/components/form-connexion/form-connexion.component.vue';
 </script>
 
-<style scoped>
-    .sc-connexion__center {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
+<style lang="scss">
+    @import './connexion.view.scss';
 </style>

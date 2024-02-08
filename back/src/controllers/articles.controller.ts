@@ -10,16 +10,10 @@ export const getFilterArticles = async (req : Request, res : Response) => {
         const articlesRepository = AppDataStore.getRepository(Article);
  
         let where: FindOptionsWhere<any> = {
-                title: req.query.title && req.query.title != ''
-                    ? ILike('%' + req.query.title + '%') 
-                    : null,
-                content: req.query.content && req.query.content != ''
-                    ? ILike('%' + req.query.content + '%') 
-                    : null,
+                title: ILike('%' + req.query.title + '%'),
+                content: ILike('%' + req.query.content + '%'),
                 author: {
-                    name: req.query.author && req.query.author != '' 
-                    ? ILike('%' + req.query.author + '%') 
-                    : null,
+                    name: ILike('%' + req.query.author + '%'),
                     id: req.query.isArticlesMe === 'true'
                     ? req.user.id
                     : null,

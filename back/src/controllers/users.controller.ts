@@ -78,7 +78,7 @@ const jwt = require('jsonwebtoken');
             }
     
             // On verifie le mot de passe de l'utilisateur
-            const matchPassword = await checkPassword(password, user.password);
+            const matchPassword = checkPassword(password, user.password);
 
             if (!matchPassword) {
                 return res.status(400).json({ message: 'Votre mot de passe ou adresse mail est erroné' });               

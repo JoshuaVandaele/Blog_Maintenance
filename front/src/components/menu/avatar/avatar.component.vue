@@ -56,10 +56,6 @@
     const user = computed(() => storeUser.getUser);
   </script>
 
-<style scoped>
-.sc-avatar__name {
-  margin: 8px 0;
-}
-
+<style lang="scss">
+  @import './avatar.component.scss';
 </style>
-```
