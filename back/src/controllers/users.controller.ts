@@ -5,6 +5,7 @@ import Res from '../helpers/res.helper';
 import { validate } from "class-validator";
 import { getUserByEmail, getUserByName } from '../services/users.service';
 import { checkPassword, generateTokenForUser, hashPassword, sendEMailResetPasswordUser } from '../services/authentificate.service';
+import bcrypt from 'bcrypt';
 
 const jwt = require('jsonwebtoken');
 
@@ -17,8 +18,7 @@ const jwt = require('jsonwebtoken');
         return Res.send(res,200,'Success',users);
     } catch (error) {
         return Res.send(res,500,'Internal Server error');
-        } 
-      
+        }
     }
 
     // Ajouter un nouvel utilisateur
@@ -32,14 +32,14 @@ const jwt = require('jsonwebtoken');
         console.log("user", user);
         if (user){
             return res.status(400).send("L'adresse email existe déjà");
-        } 
+        }
 
         // On vérifie que le pseudo n'est pas déjà utiliséé
         user = await getUserByName(name);
 
         if (user){
             return res.status(400).send("Le pseudo est déjà utilisé");
-        } 
+        }
 
         const passwordHash = await hashPassword(password);
 
@@ -48,7 +48,7 @@ const jwt = require('jsonwebtoken');
             email : email,
             password: passwordHash
         });
-         
+
         const isValidatedUser = await validate(newUser);
 
         if (!isValidatedUser) {
@@ -76,12 +76,12 @@ const jwt = require('jsonwebtoken');
             if (!user) {
                 return res.status(400).json({ message: 'Votre mot de passe ou adresse mail est erroné' });
             }
-    
+
             // On verifie le mot de passe de l'utilisateur
-            const matchPassword = checkPassword(password, user.password);
+            const matchPassword = await bcrypt.compare(password, user.password);
 
             if (!matchPassword) {
-                return res.status(400).json({ message: 'Votre mot de passe ou adresse mail est erroné' });               
+                return res.status(400).json({ message: 'Votre mot de passe ou adresse mail est erroné' });
             }
 
             // On va générer un token à partir pour l'utilisateur
@@ -102,7 +102,7 @@ const jwt = require('jsonwebtoken');
             if (!email) {
                 return res.status(400).send("Problème avec la réinitialisation");
             }
-  
+
             // on récupère l'utilisateur par son email
             const user = await getUserByEmail(email);
 
@@ -122,19 +122,19 @@ const jwt = require('jsonwebtoken');
         } catch (error) {
             return res.status(500).send("Erreur lors du traitement d'envoi du mail");
         }
-    } 
-    
+    }
+
     export const changePasswordUser = async(req: Request, res: Response) => {
         try {
             const { password, token } = req.body;
-            
+
             // On vérifie qu'on a bien le mot de passe et le token dans la requête
             if (!password || !token) {
                 return res.status(400).send("Problème avec le changement de mot de passe");
             }
-    
+
             changePasswordUser(req, res);
         } catch (error) {
             return res.status(500).send("Erreur lors du traitement de changement de mot de passe");
         }
-    }    
+    }
