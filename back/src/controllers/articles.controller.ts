@@ -9,33 +9,31 @@ import { FindOptionsWhere, ILike } from 'typeorm';
  * Le fonction getFilterArticles permet de récupérer les articles en fonction des filtres donnés
  * @param req la requête reçus (titre, contenu, auteur, isArticlesMe)
  * @param res la reponse à renvoyer
- * @returns 
+ * @returns
  */
 export const getFilterArticles = async (req : Request, res : Response) => {
     try {
         const articlesRepository = AppDataStore.getRepository(Article);
- 
+
         let where: FindOptionsWhere<any> = {
-                title: ILike('%' + req.query.title + '%'),
-                content: ILike('%' + req.query.content + '%'),
-                author: {
-                    name: ILike('%' + req.query.author + '%'),
-                    id: req.query.isArticlesMe === 'true'
-                    ? req.user.id
-                    : null,
-                },
+            title: req.query.title ? ILike('%' + req.query.title + '%') : undefined,
+            content: req.query.content ? ILike('%' + req.query.content + '%') : undefined,
+            author: {
+                name: req.query.author ? ILike('%' + req.query.author + '%') : undefined,
+                id: req.query.isArticlesMe === 'true' ? req.user.id : undefined,
+            },
         }
 
         // On fait le lien avec la classe auteurs en appliquant les filtres
         const articles = await articlesRepository.find({
             relations: ["author"],
             where
-        });             
-        
+        });
+
         // On transforme les articles en dictionnaire
-        const articlesDto: ArticleDto[] = articles.map((article) => ({...article, author: article.author.name, 
+        const articlesDto: ArticleDto[] = articles.map((article) => ({...article, author: article.author.name,
             isArticleMe: article.author.id === req.user.id}));
-        
+
         return Res.send(res,200,'Success', articlesDto);
     } catch (error) {
         return Res.send(res,500,'Erreur interne du serveur');
@@ -45,8 +43,8 @@ export const getFilterArticles = async (req : Request, res : Response) => {
 /**
  *  fonction qui ajoute un article a la base de données
  * @param req la requête reçus (titre, contenu)
- * @param res 
- * @returns 
+ * @param res
+ * @returns
  */
 export const addArticle = async (req: Request, res: Response) => {
     try {
@@ -69,7 +67,7 @@ export const addArticle = async (req: Request, res: Response) => {
             author,
             date: new Date()
         });
-        
+
         // on le sauvegarde dans la base de données
         await articlesRepository.save(newArticle);
 
@@ -85,8 +83,8 @@ export const addArticle = async (req: Request, res: Response) => {
 /**
  * La fonction updateArticle permet de mettre à jour un article de la base de données
  * @param req la requête reçus (titre, contenu, date)
- * @param res 
- * @returns 
+ * @param res
+ * @returns
  */
 
 export const  updateArticle = async(req: Request, res: Response)=> {
@@ -104,7 +102,7 @@ export const  updateArticle = async(req: Request, res: Response)=> {
         return Res.send(res, 404, "L'article n'existe pas");
     }
 
-    if (article.author.id !== req.user.id) {    
+    if (article.author.id !== req.user.id) {
         return Res.send(res, 403, "Vous n'êtes pas autorisé à modifier cet article");
     }
 
@@ -119,9 +117,9 @@ export const  updateArticle = async(req: Request, res: Response)=> {
 }
 /**
  * la fonction permet de supprimer un article de la base de données
- * @param req 
- * @param res 
- * @returns 
+ * @param req
+ * @param res
+ * @returns
  */
 export const deleteArticle = async (req: Request, res: Response) => {
     try {
@@ -140,7 +138,7 @@ export const deleteArticle = async (req: Request, res: Response) => {
             return Res.send(res, 404, "L'article n'existe pas");
         }
 
-        if (article.author.id !== req.user.id) {    
+        if (article.author.id !== req.user.id) {
             return Res.send(res, 403, "Vous n'êtes pas autorisé à supprimer cet article");
         }
 
