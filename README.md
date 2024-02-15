@@ -48,3 +48,5 @@ Pour lancer l'application avec docker, vous pouvez modifier le docker-compose-ex
 - Laetitia **BERNARD**
 - Lucie **LE FUR**
 - Joshua **VANDAËLE**
+- Jeremy **BODART**
+- Enzo **VERNALDE**
