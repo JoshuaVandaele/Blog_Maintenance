@@ -51,7 +51,7 @@ export const addArticle = async (req: Request, res: Response) => {
         // recuperer la table des articles
         const articlesRepository = AppDataStore.getRepository(Article);
 
-        const { title, content } = req.body;
+        const { title, content, categorie } = req.body;
 
         // on la table des utilisateurs
         const usersRepository = AppDataStore.getRepository(User);
@@ -64,6 +64,7 @@ export const addArticle = async (req: Request, res: Response) => {
         const newArticle = articlesRepository.create({
             title: title,
             content: content,
+            categorie: categorie,
             author,
             date: new Date()
         });

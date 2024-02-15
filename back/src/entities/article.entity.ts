@@ -14,7 +14,10 @@ export class Article extends Model {
     content: string;
     
     @Column()
-    date: Date;   
+    date: Date;
+    
+    @Column()
+    categorie: string;
 
     @ManyToOne(() => User, (user) => user.id)
     author: User

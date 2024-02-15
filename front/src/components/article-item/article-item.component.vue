@@ -18,6 +18,7 @@
           <h4 class="sc-article-item__title">{{article.title}}</h4>
           <p class="sc-article-item__text-article">{{article.content}}</p>
           <p class="sc-article-item__suite-article">...</p>
+          <p class="sc-article-item__categorie-article"><span class="categorie">{{article.categorie}}</span></p>
           <div class="sc-article-item__date-article">
             <span>{{new Date(article.date).toLocaleDateString()}}</span>
           </div>
