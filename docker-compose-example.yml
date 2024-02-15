@@ -1,0 +1,37 @@
+version: '3'
+
+networks:
+  back:
+
+services:
+  postgres:
+    container_name: blog_postgres
+    image: postgres:9.6
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    # ports:
+    #   - "5432:5432"
+    networks:
+      - back
+    volumes:
+      - ./data:/var/lib/postgresql/data
+  
+  back:
+    container_name: blog_back
+    depends_on:
+      - postgres
+    build: ./back
+    networks:
+      - back
+  
+  front:
+    container_name: blog_front
+    depends_on:
+      - back
+    build: ./front
+    networks:
+      - back
+    ports:
+      - "3000:3000"
