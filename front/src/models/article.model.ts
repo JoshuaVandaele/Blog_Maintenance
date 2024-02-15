@@ -6,5 +6,6 @@ export interface ArticleType {
     author: string;
     content: string;
     date: Date;
+    categorie: string;
     isArticleMe: boolean;
 }

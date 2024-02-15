@@ -6,6 +6,10 @@
             <v-row>
                 <v-text-field v-model="title" label="Titre" />
             </v-row>
+
+            <v-row>
+                <v-text-field v-model="categorie" label="Catégorie" />
+            </v-row>
             
             <v-row>
                 <v-textarea
@@ -49,6 +53,7 @@
 
     const title = ref(props.article ? props.article.title : null);
     const content = ref(props.article ? props.article.content: null);
+    const categorie = ref(props.article ? props.article.categorie: null);
 
     const updateOrCreate = () => {
       if (props.modeDisplay === 'CREATE') {
@@ -63,6 +68,7 @@
         const response = await Axios.post('/articles', {
             title: title.value,
             content: content.value,
+            categorie: categorie.value,
         });
         
         const alert: Alert = factoryAlertSuccess('Création article', 'Article créé avec succès !');
