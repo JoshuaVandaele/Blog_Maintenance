@@ -5,7 +5,7 @@ networks:
 
 services:
   postgres:
-    container_name: postgres
+    container_name: blog_postgres
     image: postgres:9.6
     environment:
       POSTGRES_USER: postgres
@@ -19,6 +19,7 @@ services:
       - ./data:/var/lib/postgresql/data
   
   back:
+    container_name: blog_back
     depends_on:
       - postgres
     build: ./back
@@ -26,6 +27,7 @@ services:
       - back
   
   front:
+    container_name: blog_front
     depends_on:
       - back
     build: ./front
